@@ -12,7 +12,7 @@ int main()
 	float ilosc=0;
 	for(int a=1; a<=1000; a++)
 	{
-		for(int b=1; 1<=a; b++)
+		for(int b=1; b<=a; b++)
 		{
 			if(NWD(a, b)==1)
 			{
