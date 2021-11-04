@@ -22,7 +22,7 @@ int main()
 					ilosc+=1;
 			}
 		}
-		printf("%d;%f\n", a, ilosc/(a**2));
+		printf("%d;%f\n", a, ilosc/(a*a));
 	}
 	return 0;
 }
