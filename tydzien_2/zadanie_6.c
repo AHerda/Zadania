@@ -13,13 +13,14 @@ int Dzielniki(int a)
 				suma+=a/i;
 		}
 	}
+	
 	return suma;
 }
 
 int main()
 {
-	printf("Liczby doskonałe:\n");
 	int sumy[999];
+	printf("Liczby doskonałe:\n");
 	for(int i=1; i<1000; i++)
 	{
 		sumy[i-1]=Dzielniki(i);
