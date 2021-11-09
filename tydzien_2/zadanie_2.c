@@ -5,7 +5,7 @@ int main()
 	float n;
 	printf("Wczytaj n: ");
 	scanf("%f", &n);
-	if(n==0)
+	if(n<=0)
 	{
 		printf("Śreednia to: NAN\n");
 		return 0;
