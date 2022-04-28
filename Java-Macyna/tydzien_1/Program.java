@@ -1,8 +1,0 @@
-import java.util.*;
-
-public class Program {
-    public static void main(String[] args) {
-        System.out.println("Hello world!");
-        System.out.println("Todays date: " + (new Date()));
-    }
-}
