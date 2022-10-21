@@ -1,0 +1,8 @@
+1. SHOW TABLES;
+2. SELECT title FROM film WHERE length>120;
+3. SELECT title FROM film WHERE rating='G' ORDER BY length ASC LIMIT 4;
+4. SELECT title, name FROM film JOIN language ON film.language_id=language.language_id WHERE description LIKE '%drama%';
+5. SELECT title FROM film JOIN film_category ON film.film_id=film_category.film_id JOIN category ON film_category.category_id=category.category_id WHERE category.name='Family' AND description LIKE '%Documentary%';
+6. SELECT title FROM film JOIN film_category ON film.film_id = film_category.film_id JOIN category ON film_category.category_id = category.category_id WHERE category.name = 'Children' AND rating <> 'G';
+7. SELECT rating, COUNT(film_id) AS ilosc FROM film GROUP BY rating;
+8. SELECT title FROM film JOIN inventory ON film.film_id = inventory.film_id JOIN rental ON inventory.inventory_id = rental.inventory_id WHERE DATE(rental_date) BETWEEN '2005-05-31' AND '2005-06-15' ORDER BY title ASC;
