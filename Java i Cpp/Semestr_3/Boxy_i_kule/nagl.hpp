@@ -16,6 +16,9 @@ class Warehouse {
     Warehouse(int size);
     ~Warehouse();
 
+    bool czyKoniec();
+
     private:
     Box* boxy;
+    int size; 
 };

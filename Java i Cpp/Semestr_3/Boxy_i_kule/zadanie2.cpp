@@ -1,4 +1,3 @@
-#include <iostream>
 #include "nagl.hpp"
 
 using namespace std;
