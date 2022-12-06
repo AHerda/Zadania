@@ -14,5 +14,12 @@ void Box::moreBall() {
 }
 
 int Box::getCount() {
-    return count;
+    return *cptr;
+}
+
+bool Box::collision() {
+    if(*cptr == 2) {
+        return true;
+    }
+    return false;
 }
