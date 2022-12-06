@@ -12,6 +12,10 @@ class Box {
 };
 
 class Warehouse {
-    Warehouse();
+    public:
+    Warehouse(int size);
     ~Warehouse();
+
+    private:
+    Box* boxy;
 };
