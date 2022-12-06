@@ -1,0 +1,164 @@
+1.	CREATE DATABASE Lista3;
+	CREATE TABLE Ludzie (PESEL char(11), imie varchar(30), nazwisko varchar(30), data_urodzenia date, plec ENUM('K', 'M'), PRIMARY KEY (PESEL));
+	CREATE TABLE Zawody (zawod_id int NOT NULL, nazwa varchar(50), pensja_min float, pensja_max float, PRIMARY KEY (zawod_id), CHECK (pensja_min < pensja_max));
+	CREATE TABLE Pracownicy (PESEL char(11), zawod_id int, pensja float, FOREIGN KEY (zawod_id) REFERENCES Zawody(zawod_id), FOREIGN KEY (PESEL) REFERENCES Ludzie(PESEL));
+
+PESEL nie jest dobrym kluczem ponieważ można zmienić płeć a wtedy zmienia się też pesel
+
+	ALTER TABLE Ludzie ADD czlowiek_id int PRIMARY KEY FIRST;
+	ALTER TABLE Pracownicy ADD czlowiek_id int FIRST;
+	ALTER TABLE Ludzie MODIFY czlowiek_id INT NOT NULL AUTO_INCREMENT;
+	ALTER TABLE Pracownicy ADD FOREIGN KEY (czlowiek_id) REFERENCES Ludzie(czlowiek_id);
+	ALTER TABLE Pracownicy DROP PESEL;
+
+DELIMITER $$
+CREATE OR REPLACE FUNCTION Kontrola(pesel char(11)) RETURNS INT
+BEGIN
+
+DECLARE suma INT DEFAULT 0;
+DECLARE k INT DEFAULT 0;
+
+SET suma = suma + CAST(RIGHT(LEFT(pesel, 1), 1) AS INT);
+SET suma = suma + 3*CAST(RIGHT(LEFT(pesel, 2), 1) AS INT);
+SET suma = suma + 7*CAST(RIGHT(LEFT(pesel, 3), 1) AS INT);
+SET suma = suma + 9*CAST(RIGHT(LEFT(pesel, 4), 1) AS INT);
+SET suma = suma + CAST(RIGHT(LEFT(pesel, 5), 1) AS INT);
+SET suma = suma + 3*CAST(RIGHT(LEFT(pesel, 6), 1) AS INT);
+SET suma = suma + 7*CAST(RIGHT(LEFT(pesel, 7), 1) AS INT);
+SET suma = suma + 9*CAST(RIGHT(LEFT(pesel, 8), 1) AS INT);
+SET suma = suma + CAST(RIGHT(LEFT(pesel, 9), 1) AS INT);
+SET suma = suma + 3*CAST(RIGHT(LEFT(pesel, 10), 1) AS INT);
+
+SET k = CAST(RIGHT(LEFT(pesel, 11), 1) AS INT);
+
+SET suma = suma % 10;
+SET suma = 10 - suma;
+
+IF(suma = k)
+THEN
+RETURN TRUE;
+END IF;
+RETURN FALSE;
+END$$
+DELIMITER ;
+
+
+***dodawanie ludzi oraz zawodow***
+INSERT INTO Ludzie(PESEL, imie, nazwisko, data_urodzenia, plec) VALUES ('64030852053', 'Zbyszko', 'Kobylanko', '1964-03-08', 'M');
+INSERT INTO Ludzie(PESEL, imie, nazwisko, data_urodzenia, plec) VALUES ('51090738687', 'Aleksandra', 'Kolanko', '1951-09-07', 'K');
+
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE Prace()
+BEGIN
+
+DECLARE done INT DEFAULT FALSE;
+DECLARE id, zawod, pmin, pmax, pens, wiek INT;
+DECLARE p char(1); 
+
+DECLARE Zatrudniacz CURSOR FOR (SELECT czlowiek_id, (CAST(YEAR(CURDATE()) AS INT) - CAST(YEAR(data_urodzenia) AS INT)) AS rok, plec FROM Ludzie);
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+OPEN Zatrudniacz;
+read_loop: LOOP
+
+FETCH ZATRUDNIACZ INTO id, wiek, p;
+
+IF (done)
+THEN
+LEAVE read_loop;
+END IF;
+
+IF (p = 'K' AND wiek > 60) OR (p = 'M' AND wiek > 65)
+THEN
+SELECT zawod_id, pensja_min, pensja_max INTO zawod, pmin, pmax FROM Zawody WHERE zawod_id!=3 ORDER BY RAND() LIMIT 1;
+ELSE
+SELECT zawod_id, pensja_min, pensja_max INTO zawod, pmin, pmax FROM Zawody ORDER BY RAND() LIMIT 1;
+END IF;
+
+SET pens = pmin + RAND()*(pmax-pmin);
+INSERT INTO Pracownicy VALUES (id, zawod, pens);
+
+END LOOP;
+
+CLOSE Zatrudniacz;
+
+END$$
+DELIMITER ;
+
+2.	CREATE INDEX LudzieIndeks ON Ludzie(plec, imie);
+	CREATE INDEX PracownicyIndeks ON Pracownicy(pensja);
+	
+	SELECT PESEL, imie, nazwisko, data_urodzenia, plec, nazwa, pensja AS zawod FROM Ludzie JOIN Pracownicy ON Ludzie.czlowiek_id=Pracownicy.czlowiek_id JOIN Zawody ON Pracownicy.zawod_id=Zawody.zawod_id WHERE plec='K' AND imie LIKE 'A%';
+	SELECT PESEL, imie, nazwisko, data_urodzenia, plec, nazwa, pensja AS zawod FROM Ludzie JOIN Pracownicy ON Ludzie.czlowiek_id=Pracownicy.czlowiek_id JOIN Zawody ON Pracownicy.zawod_id=Zawody.zawod_id WHERE plec='K';
+	SELECT PESEL, imie, nazwisko, data_urodzenia, plec, nazwa, pensja AS zawod FROM Ludzie JOIN Pracownicy ON Ludzie.czlowiek_id=Pracownicy.czlowiek_id JOIN Zawody ON Pracownicy.zawod_id=Zawody.zawod_id WHERE imie LIKE 'K%';
+	SELECT PESEL, imie, nazwisko, data_urodzenia, plec, nazwa, pensja AS zawod FROM Ludzie JOIN Pracownicy ON Ludzie.czlowiek_id=Pracownicy.czlowiek_id JOIN Zawody ON Pracownicy.zawod_id=Zawody.zawod_id WHERE pensja < 2000;
+	SELECT PESEL, imie, nazwisko, data_urodzenia, plec, nazwa, pensja AS zawod FROM Ludzie JOIN Pracownicy ON Ludzie.czlowiek_id=Pracownicy.czlowiek_id JOIN Zawody ON Pracownicy.zawod_id=Zawody.zawod_id WHERE plec='M' AND nazwa='informatyk' AND pensja>10000;
+
+obecne indexy to BTREE
+W przypadku zapytań które w warunkach wspominają kolumny wpisane w indeksach
+
+
+3.
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE Podwyzka(zawod varchar(50))
+BEGIN
+
+DECLARE id_zawodu INT;
+
+START TRANSACTION;
+
+SET id_zawodu = (SELECT zawod_id FROM Zawody WHERE nazwa=zawod);
+
+UPDATE Pracownicy SET pensja=pensja*1.05 WHERE zawod_id=id_zawodu;
+
+SELECT @max_pensja := MAX(pensja) FROM Pracownicy WHERE zawod_id=id_zawodu;
+SELECT @limit := pensja_max FROM Zawody WHERE zawod_id=id_zawodu;
+
+IF (@max_pensja > @limit)
+THEN
+ROLLBACK;
+ELSE
+COMMIT;
+END IF;
+END$$
+DELIMITER ;
+
+
+CALL Podwyzka('informatyk');
+
+
+4.
+
+PREPARE liczbaKobiet FROM 'SELECT COUNT(*) FROM Ludzie JOIN Pracownicy ON Ludzie.czlowiek_id=Pracownicy.czlowiek_id JOIN Zawody ON Pracownicy.zawod_id=Zawody.zawod_id WHERE plec=\'K\' AND nazwa = ?';
+
+EXECUTE liczbaKobiet USING 'informatyk';
+
+5.
+###Tworzymy BACKUP używając mysqldump###
+sudo mysqldump -u root Lista3 > ~/Desktop/backup_lista3.sql
+
+###Usuwamy baze danych###
+$ sudo mysql -u root
+DROP DATABASE Lista3;
+
+###Tworzymy nowa baze danych###
+CREATE DATABASE Lista3;
+EXIT
+
+###Przywracamy baze danych z BACKUPU stworzonego wcześniej###
+sudo mysql -u root Lista3 < ~/Desktop/backup_lista3.sql
+
+###Sprawdzamy czy wszystko jest okej###
+$ sudo mysql -u root
+USE Lista3;
+SHOW TABLES;
++------------------+
+| Tables_in_Lista3 |
++------------------+
+| Ludzie           |
+| Pracownicy       |
+| Zawody           |
++------------------+
+
+
+
