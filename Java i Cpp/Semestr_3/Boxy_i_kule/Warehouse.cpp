@@ -7,14 +7,6 @@ Warehouse::Warehouse(int size, Results results) {
     puste = size;
 }
 
-Warehouse::~Warehouse() {
-    for(int i=0; i < size; i+=1) {
-        boxy[i].~Box();
-    }
-
-    delete[] boxy;
-}
-
 bool Warehouse::add(int urna, int kula, int i) {
     int liczba = boxy[urna].getCount();
     if(liczba == 0) {
@@ -51,6 +43,6 @@ bool Warehouse::Seria(bool collision, int kula, int i, int max) {
     return true;
 }
 
-void Warehouse::Wyniki(int n) {
-    results.add(n, Bn, Un, Ln, Cn, Dn);
+void Warehouse::Wyniki(int index, int n) {
+    results.add(index, n, Bn, Un, Ln, Cn, Dn);
 }

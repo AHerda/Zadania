@@ -4,29 +4,24 @@
 
 using namespace std;
 
-Results::Results() {
-    index = 0;
-}
-
-void Results::add(int n, int Bn, int Un, int Ln, int Cn, int Dn) {
-    cout << n << " " << Bn << " " << Un << " " << Ln << " " << Cn << " " << Dn << "\n";
-
-    this->n[index] = n;
-    this->Bn[index] = Bn;
-    this->Un[index] = Un;
-    this->Ln[index] = Ln;
-    this->Cn[index] = Cn;
-    this->Dn[index] = Dn;
-
-    index+=1;
+void Results::add(int index, int in, int iBn, int iUn, int iLn, int iCn, int iDn) {
+    cout << index << endl;
+    n[index] = in;
+    Bn[index] = iBn;
+    Un[index] = iUn;
+    Ln[index] = iLn;
+    Cn[index] = iCn;
+    Dn[index] = iDn;
 }
 
 void Results::write() {
     ofstream file;
     file.open("wyniki.txt");
 
+
     for(int i = 0; i < 5000; i+=1) {
-        file << n << " " << Bn << " " << Un << " " << Ln << " " << Cn << " " << Dn << "\n"; 
+        //cout << n[i] << " " << Bn[i] << " " << Un[i] << " " << Ln[i] << " " << Cn[i] << " " << Dn[i] << " " << (Dn[i]-Cn[i]) << "\n";
+        file << n[i] << " " << Bn[i] << " " << Un[i] << " " << Ln[i] << " " << Cn[i] << " " << Dn[i] << " " << (Dn[i]-Cn[i]) << "\n"; 
     }
 
     file.close();

@@ -7,18 +7,15 @@ class Results {
     int Cn[5000];
     int Dn[5000];
 
-    int index;
+    int index = 0;
 
-    Results();
-
-    void add(int n, int Bn, int Un, int Ln, int Cn, int Dn);
+    void add(int index, int n, int Bn, int Un, int Ln, int Cn, int Dn);
     void write();
 };
 
 class Box {
     public:
     Box();
-    ~Box();
 
     int getCount();
     void moreBall();
@@ -27,7 +24,6 @@ class Box {
 
     private:
     int count;
-    int* cptr;
 };
 
 class Warehouse {
@@ -40,9 +36,8 @@ class Warehouse {
     Results results;
 
     Warehouse(int size, Results results);
-    ~Warehouse();
 
-    void Wyniki(int n);
+    void Wyniki(int index, int n);
 
     bool Seria(bool collision, int kula, int i, int max);
 
