@@ -8,7 +8,7 @@ Warehouse::Warehouse(int size, Results results) {
 }
 
 Warehouse::~Warehouse() {
-    for(int i=0; i < size; i++) {
+    for(int i=0; i < size; i+=1) {
         boxy[i].~Box();
     }
 
@@ -23,7 +23,7 @@ bool Warehouse::add(int urna, int kula, int i) {
     else if(liczba == 1) {
         podwojne++;
     }
-    if(liczba = max) {
+    if(liczba == max) {
         max = liczba + 1;
     }
 
@@ -45,7 +45,7 @@ bool Warehouse::Seria(bool collision, int kula, int i, int max) {
         Cn = kula;
     }
     if(podwojne == i) {
-        Cn = kula;
+        Dn = kula;
         return false;
     }
     return true;

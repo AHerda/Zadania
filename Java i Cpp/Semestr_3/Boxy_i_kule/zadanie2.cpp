@@ -11,8 +11,10 @@ int main(int argc, char* argv[])
     for(int i = 1000; i <= 100000; i += 1000)
     {
         uniform_int_distribution los{ 0, i };
-        for(int j = 0; j < 50; j++)
+        int j = 0;
+        while(j < 50)
         {
+            cout << "j: " << j << "\n";
             Warehouse warehouse(i, results);
             int n = 1;
             bool check = true;
@@ -20,10 +22,11 @@ int main(int argc, char* argv[])
             {
                 int losowa = los(mt);
                 check = warehouse.add(losowa, n, i);
-                n++;
+                n+=1;
             }
             warehouse.Wyniki(i);
-            warehouse.~Warehouse();
+            j+=1;
         }
     }
+    results.write();
 }
