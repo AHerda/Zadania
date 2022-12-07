@@ -1,8 +1,9 @@
 #include "nagl.hpp"
 
-Warehouse::Warehouse(int size) {
+Warehouse::Warehouse(int size, Results results) {
     boxy = new Box[size];
     this->size = size;
+    this->results = results;
     puste = size;
 }
 
@@ -48,4 +49,8 @@ bool Warehouse::Seria(bool collision, int kula, int i, int max) {
         return false;
     }
     return true;
+}
+
+void Warehouse::Wyniki(int n) {
+    results.add(n, Bn, Un, Ln, Cn, Dn);
 }
