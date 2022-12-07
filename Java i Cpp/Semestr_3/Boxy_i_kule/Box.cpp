@@ -12,6 +12,10 @@ int Box::getCount() {
     return count;
 }
 
+void Box::setCount(int i) {
+    count = i;
+}
+
 bool Box::collision() {
     if(count == 2) {
         return true;

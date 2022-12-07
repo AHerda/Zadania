@@ -18,6 +18,7 @@ class Box {
     Box();
 
     int getCount();
+    void setCount(int i);
     void moreBall();
 
     bool collision();
@@ -29,7 +30,11 @@ class Box {
 class Warehouse {
     public:
     //wyniki
-    int Bn=0, Un=0, Ln=0, Cn=0, Dn=0;
+    int Bn;
+    int Un;
+    int Ln;
+    int Cn;
+    int Dn;
     //pomocnicze
     int size, puste, podwojne, max;
     //wyniki
@@ -38,6 +43,7 @@ class Warehouse {
     Warehouse(int size, Results results);
 
     void Wyniki(int index, int n);
+    void zeruj(int n);
 
     bool Seria(bool collision, int kula, int i, int max);
 

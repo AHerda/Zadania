@@ -11,9 +11,9 @@ int main(int argc, char* argv[])
     for(int i = 1000; i <= 100000; i += 1000)
     {
         uniform_int_distribution los{ 0, i };
+        Warehouse warehouse(i, results);
         for(int j = 0; j < 50; j+=1)
         {
-            Warehouse warehouse(i, results);
             int n = 1;
             bool check = true;
             while(check)
@@ -22,10 +22,9 @@ int main(int argc, char* argv[])
                 check = warehouse.add(losowa, n, i);
                 n+=1;
             }
-            warehouse.Wyniki((((i / 1000) - 1) * 50 + j), i);
+            //warehouse.Wyniki((((i / 1000) - 1) * 50 + j), i);
+            warehouse.zeruj(i);
         }
     }
-    results.write();
-
     return 0;
 }
