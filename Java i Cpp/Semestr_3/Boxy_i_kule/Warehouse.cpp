@@ -56,7 +56,7 @@ bool Warehouse::Seria(bool collision, int kula) {
 }
 
 void Warehouse::zeruj(int n) {
-    std::cout << n << " " << Bn << " " << Un << " " << Ln << " " << Cn << " " << Dn << " " << Dn-Cn << " ";
+    std::cout << n << " " << Bn << " " << Un << " " << Ln << " " << Cn << " " << Dn << " " << Dn-Cn << "\n";
 
     for(int i = 0; i < size; i+=1) {
         boxy[i] = 0;
