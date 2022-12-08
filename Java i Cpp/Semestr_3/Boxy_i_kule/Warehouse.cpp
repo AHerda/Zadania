@@ -10,6 +10,7 @@ Warehouse::Warehouse(int size) {
     puste = size;
 
     podwojne = 0;
+    max = 0;
 
     Bn=0;
     Un=0;

@@ -12,7 +12,7 @@ def srednie(lista):
     return srednia
 
 
-
+n_poj = range(1000, 100001, 1000)
 
 
 uchwyt = open("wyniki.txt", encoding="UTF-16 LE")
@@ -64,6 +64,8 @@ Cn = []
 for i in Cn_str:
     Cn.append(int(i))
 
+cn = srednie(Cn)
+
 uchwyt = open("wyniki.txt", encoding="UTF-16 LE")
 Dn_str = uchwyt.read().split()[5::7]
 uchwyt.close()
@@ -71,6 +73,8 @@ uchwyt.close()
 Dn = []
 for i in Dn_str:
     Dn.append(int(i))
+
+dn = srednie(Dn)
 
 uchwyt = open("wyniki.txt", encoding="UTF-16 LE")
 DCn_str = uchwyt.read().split()[6::7]
@@ -80,6 +84,8 @@ DCn = []
 for i in DCn_str:
     DCn.append(int(i))
 
+dcn = srednie(DCn)
+
 
 plt.figure(1)
 
@@ -88,7 +94,7 @@ plt.xlabel("Ilość urn")
 plt.ylabel("Bn")
 
 plt.plot(n, Bn, "bo", markersize=1)
-plt.plot(range(1000, 100001, 1000), bn, "ro-", markersize=1, linewidth=1)
+plt.plot(n_poj, bn, "ro-", markersize=1, linewidth=1)
 
 plt.savefig("wykres Bn.png", dpi=300)
 
@@ -99,6 +105,53 @@ plt.xlabel("Ilość urn")
 plt.ylabel("Un")
 
 plt.plot(n, Un, "bo", markersize=1)
-plt.plot(range(1000, 100001, 1000), srednie(Un), "ro-", markersize=1, linewidth=1)
+plt.plot(n_poj, un, "ro-", markersize=1, linewidth=1)
 
 plt.savefig("wykres Un.png", dpi=300)
+
+plt.figure(3)
+
+plt.title("Wykres Ln")
+plt.xlabel("Ilość urn")
+plt.ylabel("Ln")
+
+plt.hist2d(n, Ln, bins=100, cmap="Blues")
+plt.plot(n_poj, ln, "ro-", markersize=1, linewidth=1)
+
+cb = plt.colorbar()
+cb.set_label("Ilość prob")
+
+plt.savefig("wykres Ln.png", dpi=300)
+
+plt.figure(4)
+
+plt.title("Wykres Cn")
+plt.xlabel("Ilość urn")
+plt.ylabel("Cn")
+
+plt.plot(n, Cn, "bo", markersize=1)
+plt.plot(n_poj, cn, "ro-", markersize=1, linewidth=1)
+
+plt.savefig("wykres Cn.png", dpi=300)
+
+plt.figure(5)
+
+plt.title("Wykres Dn")
+plt.xlabel("Ilość urn")
+plt.ylabel("Dn")
+
+plt.plot(n, Dn, "bo", markersize=1)
+plt.plot(n_poj, dn, "ro-", markersize=1, linewidth=1)
+
+plt.savefig("wykres Dn.png", dpi=300)
+
+plt.figure(6)
+
+plt.title("Wykres Dn-Cn")
+plt.xlabel("Ilość urn")
+plt.ylabel("Dn-Cn")
+
+plt.plot(n, DCn, "bo", markersize=1)
+plt.plot(n_poj, dcn, "ro-", markersize=1, linewidth=1)
+
+plt.savefig("wykres DCn.png", dpi=300)
