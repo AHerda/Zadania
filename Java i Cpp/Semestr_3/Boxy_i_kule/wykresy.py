@@ -158,17 +158,20 @@ plt.plot(n_poj, dcn, "ro-", markersize=1, linewidth=1)
 
 plt.savefig("wykres DCn.png", dpi=300)
 
+for i in range(100):
+    dcn[i] = dn[i] - cn[i]
+
 plt.figure(7)
 
 bn1 = [0] * 100
-for i in range(len(bn)):
+for i in range(100):
     bn1[i] = bn[i]/n_poj[i]
 
 plt.subplot(2, 1, 1)
 plt.plot(n_poj, bn1, "yo-", markersize=1, linewidth=1)
 plt.ylabel("b(n)/n")
 
-for i in range(len(bn)):
+for i in range(100):
     bn[i] = bn[i]/sqrt(n_poj[i])
 
 plt.subplot(2, 1, 2)
@@ -183,7 +186,7 @@ plt.savefig("wykres bnn.png", dpi=300)
 
 plt.figure(8)
 
-for i in range(len(un)):
+for i in range(100):
     un[i] = un[i]/n_poj[i]
 
 plt.xlabel("n")
@@ -203,18 +206,102 @@ plt.subplot(3, 1, 1)
 plt.plot(n_poj, ln1, "yo-", markersize=1, linewidth=1)
 plt.ylabel("l(n)/ln(n)")
 
-for i in range(len(bn)):
+for i in range(100):
     ln1[i] = ln[i]/(n_log[i]/n_loglog[i])
 
 plt.subplot(3, 1, 2)
 plt.plot(n_poj, ln1, "go-", markersize=1, linewidth=1)
 plt.ylabel("l(n) / (ln(n)/ln(ln(n)))")
 
-for i in range(len(bn)):
+for i in range(100):
     ln1[i] = ln[i]/n_loglog[i]
 
 plt.subplot(3, 1, 3)
 plt.plot(n_poj, ln1, "ro-", markersize=1, linewidth=1)
 plt.ylabel("l(n)/ln(ln(n))")
 
+plt.subplots_adjust(hspace=0.2)
 plt.savefig("wykres lnn.png", dpi=300)
+
+plt.figure(10)
+plt.xlabel("n")
+
+cn1 = [0] * 100
+for i in range(100):
+    cn1[i] = cn[i]/n_poj[i]
+
+plt.subplot(3, 1, 1)
+plt.plot(n_poj, cn1, "yo-", markersize=1, linewidth=1)
+plt.ylabel("c(n)/n")
+
+for i in range(100):
+    cn1[i] = cn[i]/(n_log[i]*n_poj[i])
+
+plt.subplot(3, 1, 2)
+plt.plot(n_poj, cn1, "go-", markersize=1, linewidth=1)
+plt.ylabel("c(n) / (n*ln(n))")
+
+for i in range(100):
+    cn1[i] = cn[i]/(n_poj[i]**2)
+
+plt.subplot(3, 1, 3)
+plt.plot(n_poj, cn1, "ro-", markersize=1, linewidth=1)
+plt.ylabel("c(n)/n^2")
+
+plt.subplots_adjust(hspace=0.2)
+plt.savefig("wykres cnn.png", dpi=300)
+
+plt.figure(11)
+plt.xlabel("n")
+
+dn1 = [0] * 100
+for i in range(100):
+    dn1[i] = dn[i]/n_poj[i]
+
+plt.subplot(3, 1, 1)
+plt.plot(n_poj, dn1, "yo-", markersize=1, linewidth=1)
+plt.ylabel("d(n)/n")
+
+for i in range(100):
+    dn1[i] = dn[i]/(n_log[i]*n_poj[i])
+
+plt.subplot(3, 1, 2)
+plt.plot(n_poj, dn1, "go-", markersize=1, linewidth=1)
+plt.ylabel("d(n) / (n*ln(n))")
+
+for i in range(100):
+    dn1[i] = dn[i]/(n_poj[i]**2)
+
+plt.subplot(3, 1, 3)
+plt.plot(n_poj, dn1, "ro-", markersize=1, linewidth=1)
+plt.ylabel("d(n)/n^2")
+
+plt.subplots_adjust(hspace=0.2)
+plt.savefig("wykres dnn.png", dpi=300)
+
+plt.figure(12)
+plt.xlabel("n")
+
+dcn1 = [0] * 100
+for i in range(100):
+    dcn1[i] = dcn[i]/n_poj[i]
+
+plt.subplot(3, 1, 1)
+plt.plot(n_poj, dcn1, "yo-", markersize=1, linewidth=1)
+plt.ylabel("(d(n)-c(n))/n")
+
+for i in range(100):
+    dcn1[i] = dcn[i]/(n_log[i]*n_poj[i])
+
+plt.subplot(3, 1, 2)
+plt.plot(n_poj, dcn1, "go-", markersize=1, linewidth=1)
+plt.ylabel("(d(n)-c(n)) / (n*ln(n))")
+
+for i in range(100):
+    dcn1[i] = dcn[i]/(n_poj[i]*n_loglog[i])
+
+plt.subplot(3, 1, 3)
+plt.plot(n_poj, dcn1, "ro-", markersize=1, linewidth=1)
+plt.ylabel("(d(n)-c(n)) / (n*log(log(n)))")
+
+plt.savefig("wykres dcnn.png", dpi=300)
