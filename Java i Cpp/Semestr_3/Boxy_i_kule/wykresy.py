@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from numpy import sqrt
 
 
 
@@ -155,3 +156,37 @@ plt.plot(n, DCn, "bo", markersize=1)
 plt.plot(n_poj, dcn, "ro-", markersize=1, linewidth=1)
 
 plt.savefig("wykres DCn.png", dpi=300)
+
+plt.figure(7)
+
+bn1 = [0] * 100
+for i in range(len(bn)):
+    bn1[i] = bn[i]/n_poj[i]
+
+plt.subplot(2, 1, 1)
+plt.plot(n_poj, bn1, "yo-", markersize=1, linewidth=1)
+plt.ylabel("b(n)/n")
+
+for i in range(len(bn)):
+    bn[i] = bn[i]/sqrt(n_poj[i])
+
+plt.subplot(2, 1, 2)
+plt.plot(n_poj, bn, "go-", markersize=1, linewidth=1)
+plt.ylabel("b(n)/sqrt(n)")
+
+
+plt.subplots_adjust(hspace=0.2)
+plt.xlabel("n")
+
+plt.savefig("wykres bnn.png", dpi=300)
+
+plt.figure(8)
+
+for i in range(len(un)):
+    un[i] = un[i]/n_poj[i]
+
+plt.xlabel("n")
+plt.ylabel("u(n)/n")
+plt.plot(n_poj, un, "go-", markersize=1)
+
+plt.savefig("wykres unn.png", dpi=300)
