@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from numpy import sqrt
+from numpy import sqrt, log
 
 
 
@@ -14,7 +14,8 @@ def srednie(lista):
 
 
 n_poj = range(1000, 100001, 1000)
-
+n_log = log(n_poj)
+n_loglog = log(n_log)
 
 uchwyt = open("wyniki.txt", encoding="UTF-16 LE")
 n_str = uchwyt.read().split()[::7]
@@ -190,3 +191,30 @@ plt.ylabel("u(n)/n")
 plt.plot(n_poj, un, "go-", markersize=1)
 
 plt.savefig("wykres unn.png", dpi=300)
+
+plt.figure(9)
+plt.xlabel("n")
+
+ln1 = [0] * 100
+for i in range(100):
+    ln1[i] = ln[i]/n_log[i]
+
+plt.subplot(3, 1, 1)
+plt.plot(n_poj, ln1, "yo-", markersize=1, linewidth=1)
+plt.ylabel("l(n)/ln(n)")
+
+for i in range(len(bn)):
+    ln1[i] = ln[i]/(n_log[i]/n_loglog[i])
+
+plt.subplot(3, 1, 2)
+plt.plot(n_poj, ln1, "go-", markersize=1, linewidth=1)
+plt.ylabel("l(n) / (ln(n)/ln(ln(n)))")
+
+for i in range(len(bn)):
+    ln1[i] = ln[i]/n_loglog[i]
+
+plt.subplot(3, 1, 3)
+plt.plot(n_poj, ln1, "ro-", markersize=1, linewidth=1)
+plt.ylabel("l(n)/ln(ln(n))")
+
+plt.savefig("wykres lnn.png", dpi=300)
