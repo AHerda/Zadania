@@ -1,0 +1,55 @@
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE Dodaj_Ocene(ocena INT, kurs VARCHAR(150), opis VARCHAR(150), id_student INT, login INT)
+BEGIN
+	IF (SELECT COUNT(*) FROM Kursy WHERE nazwa LIKE kurs AND Wykladowca = login) = 1 THEN
+		IF id_student IN (SELECT uzytkownik_id FROM Uzytkownik_Kurs AS UK JOIN Kursy AS K ON K.id=UK.kurs_id WHERE nazwa LIKE kurs AND Wykladowca = login) THEN
+			INSERT INTO Oceny (ocena, opis, uzytkownik_id, kurs_id) VALUES (ocena, opis, id_studenta, (SELECT id FROM Kursy WHERE nazwa LIKE kurs AND Wykladowca = login));
+		END IF;
+	END IF;
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE Usun_Ocene(id INT, id_wykladowcy INT)
+BEGIN
+	DELETE FROM Oceny WHERE Oceny.id = id AND kurs_id IN (SELECT K.id FROM Kursy AS K WHERE K.Wykladowca=id_wykladowcy);
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE Wyswietl_Oceny(id INT, kurs VARCHAR(150))
+BEGIN
+	SELECT ocena, Kursy.nazwa AS "Nazwa kursu", opis, nazwisko FROM Oceny JOIN Kursy ON Oceny.kurs_id = Kursy.id JOIN Uzytkownicy ON Uzytkownicy.id = Kursy.Wykladowca WHERE Oceny.uzytkownik_id = id AND Kursy.nazwa LIKE kurs;
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE OR REPLACE PROCEDURE Wyswietl_Srednia(id INT, kurs VARCHAR(150))
+BEGIN
+	SELECT AVG(ocena) AS srednia, kurs FROM Oceny JOIN Kursy ON Oceny.kurs_id = Kursy.id WHERE Oceny.uzytkownik_id = id AND Kursy.nazwa LIKE kurs;
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE TRIGGER Czysc BEFORE DELETE ON Uzytkownicy
+FOR EACH ROW
+BEGIN
+    DELETE FROM Uzytkownik_Status WHERE Uzytkownik_Status.uzytkownik_id=OLD.id;
+    DELETE FROM Uzytkownik_Kurs WHERE Uzytkownik_Kurs.uzytkownik_id=OLD.id;
+    DELETE FROM Oceny WHERE Oceny.uzytkownik_id=OLD.id;
+END$$
+DELIMITER ;
+
+
+CREATE USER student@localhost;
+GRANT SELECT ON jsos.Oceny TO student@localhost;
+
+CREATE USER wykladowca@localhost;
+GRANT SELECT, DELETE, INSERT, UPDATE ON jsos.Oceny TO student@localhost;
+
+CREATE USER admin@localhost;
+GRANT ALL PRIVILEGES ON jsos.* TO admin@localhost;
